@@ -6,7 +6,7 @@ import styles from './ArticleParamsForm.module.scss';
 export const ArticleParamsForm = () => {
 	return (
 		<>
-			<ArrowButton />
+			<ArrowButton isOpened={} onClick={}/>
 			<aside className={styles.container}>
 				<form className={styles.form}>
 					<div className={styles.bottomContainer}>
