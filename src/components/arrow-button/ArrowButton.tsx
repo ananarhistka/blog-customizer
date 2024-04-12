@@ -11,6 +11,7 @@ export type ArrowButtonProps = {
 };
 
 export const ArrowButton = ({ isOpened, onClick }: ArrowButtonProps) => {
+
 	return (
 		<div
 			role='button'
