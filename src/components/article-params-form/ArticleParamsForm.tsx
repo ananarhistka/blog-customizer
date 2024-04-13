@@ -8,7 +8,7 @@ import { outsideClickHandler } from './sidebar/outsideClickHandler';
 
 import styles from './ArticleParamsForm.module.scss';
 
-const ArticleParamsForm = () => {
+export const ArticleParamsForm = () => {
   const [isOpened, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState<OptionType>(defaultArticleState.fontSizeOption);
