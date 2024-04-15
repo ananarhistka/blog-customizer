@@ -11,6 +11,7 @@ import {
 	OptionType,
 	ArticleStateType,
 } from 'src/constants/articleProps';
+
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
 import { useOutsideClickHandler } from './sidebar/outsideClickHandler';
@@ -23,8 +24,7 @@ type ArticleParamsFormProps = {
 	submitHandler: (params: ArticleStateType) => void;
 };
 
-export const ArticleParamsForm = (props
-: ArticleParamsFormProps) => {
+export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const [isOpened, setIsOpen] = useState(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [fontSize, setFontSize] = useState<OptionType>(
@@ -94,11 +94,10 @@ export const ArticleParamsForm = (props
 			fontSizeOption: fontSize,
 			fontColor,
 			backgroundColor,
-			contentWidth
+			contentWidth,
 		};
 		updateParams(params);
 	};
-
 
 	return (
 		<div ref={rootRef}>
@@ -123,11 +122,13 @@ export const ArticleParamsForm = (props
 						onChange={updateFontSizeOption}
 						title='размер шрифта'
 					/>
-					<Select
-						options={fontColors}
-						selected={fontColor}
-						onChange={fontColorOption}
-						title='цвет шрифта'></Select>
+					<div className={styles.control}>
+						<Select
+							options={fontColors}
+							selected={fontColor}
+							onChange={fontColorOption}
+							title='цвет шрифта'></Select>
+					</div>
 					<Select
 						options={backgroundColors}
 						selected={backgroundColor}
@@ -139,7 +140,7 @@ export const ArticleParamsForm = (props
 						onChange={contentWidthOption}
 						title='ширина контента'></Select>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' onClick={backToDefault}/>
+						<Button title='Сбросить' type='reset' onClick={backToDefault} />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>
