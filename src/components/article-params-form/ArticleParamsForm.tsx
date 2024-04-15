@@ -13,7 +13,7 @@ import {
 } from 'src/constants/articleProps';
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
-import { outsideClickHandler } from './sidebar/outsideClickHandler';
+import { useOutsideClickHandler } from './sidebar/outsideClickHandler';
 import { Text } from '../text';
 
 import styles from './ArticleParamsForm.module.scss';
@@ -23,11 +23,9 @@ type ArticleParamsFormProps = {
 	submitHandler: (params: ArticleStateType) => void;
 };
 
-export const ArticleParamsForm = ({
-	submitHandler,
-}: ArticleParamsFormProps) => {
+export const ArticleParamsForm = (props
+: ArticleParamsFormProps) => {
 	const [isOpened, setIsOpen] = useState(false);
-	const [submitForm, setSubmitForm] = useState(defaultArticleState);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [fontSize, setFontSize] = useState<OptionType>(
 		defaultArticleState.fontSizeOption
@@ -49,9 +47,9 @@ export const ArticleParamsForm = ({
 		setIsOpen(!isOpened);
 	};
 
-	outsideClickHandler({
+	useOutsideClickHandler({
 		isOpened,
-		onClose: () => setIsOpen(false),
+		onChange: () => setIsOpen(false),
 		rootRef,
 	});
 
@@ -75,15 +73,32 @@ export const ArticleParamsForm = ({
 		setContentWidth(selected);
 	};
 
-	function sendingForm(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		submitHandler(submitForm);
-	}
-
-	const sentForm = () => {
-		setSubmitForm(defaultArticleState);
-		submitHandler(defaultArticleState);
+	const backToDefault = () => {
+		const defaultParams = defaultArticleState;
+		setFontFamily(defaultParams.fontFamilyOption);
+		setFontSize(defaultParams.fontSizeOption);
+		setFontColor(defaultParams.fontColor);
+		setBackgroundColor(defaultParams.backgroundColor);
+		setContentWidth(defaultParams.contentWidth);
+		updateParams(defaultParams);
 	};
+
+	const updateParams = (params: ArticleStateType) => {
+		props.submitHandler(params);
+	};
+
+	const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const params = {
+			fontFamilyOption: fontFamily,
+			fontSizeOption: fontSize,
+			fontColor,
+			backgroundColor,
+			contentWidth
+		};
+		updateParams(params);
+	};
+
 
 	return (
 		<div ref={rootRef}>
@@ -92,7 +107,7 @@ export const ArticleParamsForm = ({
 				className={clsx(styles.container, {
 					[styles.container_open]: isOpened,
 				})}>
-				<form className={styles.form} onSubmit={sendingForm} onReset={sentForm}>
+				<form className={styles.form} onSubmit={onFormSubmit}>
 					<Text weight={800} size={31} uppercase dynamicLite>
 						задайте параметры
 					</Text>
@@ -124,7 +139,7 @@ export const ArticleParamsForm = ({
 						onChange={contentWidthOption}
 						title='ширина контента'></Select>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' />
+						<Button title='Сбросить' type='reset' onClick={backToDefault}/>
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>

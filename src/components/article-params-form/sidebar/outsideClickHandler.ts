@@ -1,26 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
-type TOutsideClickHandler = {
-  isOpened: boolean;
-  onClose?: () => void;
-  rootRef: React.RefObject<HTMLElement>;
-};
+interface OutsideClickHandlerProps {
+	isOpened: boolean;
+	onChange?: (newValue: boolean) => void;
+	rootRef: React.RefObject<HTMLElement>;
+}
 
-export const outsideClickHandler = ({ isOpened, onClose, rootRef }: TOutsideClickHandler) => {
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const { target } = event;
-      if (target instanceof Node && rootRef.current && !rootRef.current.contains(target)) {
-        onClose && onClose();
-      }
-    };
+export const useOutsideClickHandler = ({
+	onChange,
+	rootRef,
+}: OutsideClickHandlerProps) => {
+	const handleClickOutside = useCallback(
+		(event: MouseEvent) => {
+			const target = event.target as Node;
+			if (
+				rootRef.current &&
+				!rootRef.current.contains(target) &&
+				document.body.contains(target)
+			) {
+				onChange?.(false);
+			}
+		},
+		[onChange, rootRef]
+	);
 
-    if (isOpened) {
-      document.addEventListener('click', handleClickOutside);
-    }
+	useEffect(() => {
+		document.addEventListener('click', handleClickOutside);
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [isOpened, onClose, rootRef]);
+		return () => {
+			document.removeEventListener('click', handleClickOutside);
+		};
+	}, [handleClickOutside]);
 };
