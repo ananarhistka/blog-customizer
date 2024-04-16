@@ -26,7 +26,7 @@ type ArticleParamsFormProps = {
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const [isOpened, setIsOpen] = useState(false);
-	const rootRef = useRef<HTMLDivElement>(null);
+	const forRef = useRef<HTMLDivElement>(null);
 	const [fontSize, setFontSize] = useState<OptionType>(
 		defaultArticleState.fontSizeOption
 	);
@@ -50,7 +50,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	useOutsideClickHandler({
 		isOpened,
 		onChange: () => setIsOpen(false),
-		rootRef,
+		rootRef: forRef,
 	});
 
 	const updateFontSizeOption = (value: OptionType) => {
@@ -100,7 +100,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	};
 
 	return (
-		<div ref={rootRef}>
+		<div ref={forRef}>
 			<ArrowButton isOpened={isOpened} onClick={openForm} />
 			<aside
 				className={clsx(styles.container, {
